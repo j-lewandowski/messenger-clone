@@ -2,6 +2,7 @@
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { BsGithub, BsGoogle } from "react-icons/bs";
+import axios from "axios";
 
 import Input from "@/app/components/inputs/Input";
 import Button from "@/app/components/Button";
@@ -28,7 +29,7 @@ const AuthForm = () => {
   } = useForm<FieldValues>({
     defaultValues: {
       name: "",
-      name: "",
+      email: "",
       password: "",
     },
   });
@@ -37,7 +38,7 @@ const AuthForm = () => {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
-      // Axios register
+      axios.post("/api/register", data);
     }
 
     if (variant === "LOGIN") {
@@ -56,11 +57,18 @@ const AuthForm = () => {
       <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
-            <Input id="name" label="Name" register={register} errors={errors} />
+            <Input
+              id="name"
+              label="Name"
+              register={register}
+              errors={errors}
+              disabled={isLoading}
+            />
           )}
           <Input
             id="email"
             label="Email address"
+            disabled={isLoading}
             type="email"
             register={register}
             errors={errors}
@@ -68,6 +76,7 @@ const AuthForm = () => {
           <Input
             id="password"
             label="Password"
+            disabled={isLoading}
             type="password"
             register={register}
             errors={errors}
